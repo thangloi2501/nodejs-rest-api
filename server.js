@@ -19,11 +19,11 @@ app.get("/api/users/:id", (req, res) => {
 });
 
 // Add new user
-app.post("/api/users", (req, res) => {
+app.post("/api/users", (req, res, next) => {
   try {
     const { name, email } = req.body;
 
-    if (name == 'thang') {
+    if (name === 'xxx') {
         throw new Error("Ten phai khac cai ten nay: " + name);
     }
 
