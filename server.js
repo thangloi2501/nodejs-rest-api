@@ -20,10 +20,19 @@ app.get("/api/users/:id", (req, res) => {
 
 // Add new user
 app.post("/api/users", (req, res) => {
-  const { name, email } = req.body;
-  const newUser = { id: users.length + 1, name, email };
-  users.push(newUser);
-  res.status(201).json(newUser);
+  try {
+    const { name, email } = req.body;
+
+    if (name == 'thang') {
+        throw new Error("Ten phai khac cai ten nay: " + name);
+    }
+
+    const newUser = { id: users.length + 1, name, email };
+    users.push(newUser);
+    res.status(201).json(newUser);
+  } catch (err) {
+    next(err); // pass error to error handler
+  }
 });
 
 // Update user
@@ -41,6 +50,15 @@ app.delete("/api/users/:id", (req, res) => {
   if (index === -1) return res.status(404).json({ message: "User not found" });
   users.splice(index, 1);
   res.json({ message: "User deleted" });
+});
+
+// --- exception handler ----
+app.use((err, req, res, next) => {
+  console.error(err.stack); // log to console
+  res.status(err.statusCode || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+  });
 });
 
 // --- Start server ---
