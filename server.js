@@ -1,5 +1,6 @@
 import express from "express";
 import { users } from "./data/users.js";
+import asyncRoutes from "./routes/asyncRoutes.js";
 
 const app = express();
 app.use(express.json());
@@ -51,6 +52,9 @@ app.delete("/api/users/:id", (req, res) => {
   users.splice(index, 1);
   res.json({ message: "User deleted" });
 });
+
+// -- async -------
+app.use("/api", asyncRoutes); // prefix all async routes with /api
 
 // --- exception handler ----
 app.use((err, req, res, next) => {
